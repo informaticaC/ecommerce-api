@@ -2,70 +2,68 @@ const request = require("supertest")
 const app = require("../app")
 
 const BASE_URL = '/api/v1/users'
-let TOKEN
-
-let userId;
+let TOKEN 
+let userId
 
 beforeAll(async()=>{
     const user = {
-        email: "adalberto@veremole.com",
-        password:"123456"
+        email: "demilanesa@gmail.com",
+        password: "123456"
     }
 
     const res = await request(app)
-            .post(`${BASE_URL}/login`)
-            .send(user)
-
+        .post(`${BASE_URL}/login`)
+        .send(user)
+    
     TOKEN = res.body.token
 })
 
-test("GET -> 'BASE_URL', should return status code 200 and res.body to have length 1",async()=>{
+test("GET -> 'URL_BASE', should return status code 200 and res.body to have length 1",async()=>{
     const res = await request(app)
         .get(BASE_URL)
         .set('Authorization', `Bearer ${TOKEN}`)
-    //console.log(res.body)
-    console.log(TOKEN)
     expect(res.status).toBe(200)
     expect(res.body).toHaveLength(1)
 })
 
-test("POST -> 'BASE_URL', SHOULD RETURN STATUS CODE 201 and res.body.firstName === body.firstName", async()=>{
+test("POST -> 'URL_BASE' should return status code 201 and res.body.firstName === body.firstName", async()=>{
     const userCreate = {
-        firstName: "Marcelito",
-        lastName: "Pesoa",
-        email: "marcelito@veremole.com",
+        firstName: "Myke",
+        lastName: "Tyson",
+        email: "miketyson@quemail.com",
         password: "123456",
-        phone: "555-22-666"
+        phone: "555-44-3323"
     }
 
     const res = await request(app)
         .post(BASE_URL)
         .send(userCreate)
 
-    userId = res.body.id;
+    userId = res.body.id
 
     expect(res.status).toBe(201)
     expect(res.body.firstName).toBe(userCreate.firstName)
 })
 
-test("put -> 'BASE_URL/:id', should return status code 200 and res.body.firstName", async()=>{
+test("PUT -> 'BASE_URL/:id', should return status code 200 and res.body.firstName = body.firstName", async()=>{
     const userUpdate = {
-        firstName : "Daniela"
+        firstName: "Adalberto"
     }
 
     const res = await request(app)
-    .put(`${BASE_URL}/${userId}`)
-    .send(userUpdate)
-    .set("Authorization", `Bearer ${TOKEN}`)
+        .put(`${BASE_URL}/${userId}`)
+        .send(userUpdate)
+        .set("Authorization", `Bearer ${TOKEN}`)
 
     expect(res.status).toBe(200)
     expect(res.body.firstName).toBe(userUpdate.firstName)
+
 })
 
-test("POST -> 'BASE_URL/login', should return status code 200 y res.body.email === body.email and token defined", async()=>{
+test("POST 'BASE_URL/login', should return status code 200 res.body.email === body.email and token defined", async()=>{
     const userLogin = {
-        email: "marcelito@veremole.com",
-        password: "123456"
+        email: "miketyson@quemail.com",
+        password: "123456",
     }
 
     const res = await request(app)
@@ -77,10 +75,10 @@ test("POST -> 'BASE_URL/login', should return status code 200 y res.body.email =
     expect(res.body.token).toBeDefined()
 })
 
-test("POST -> 'BASE_URL/login', should return status code 401", async()=>{
+test("POST 'BASE_URL/login', should return status code 401", async()=>{
     const userLogin = {
-        email: "marcelito@veremole.com",
-        password: "InvalidPassword"
+        email: "daniela@gmail.com",
+        password: "invalid password",
     }
 
     const res = await request(app)
@@ -88,16 +86,15 @@ test("POST -> 'BASE_URL/login', should return status code 401", async()=>{
         .send(userLogin)
 
     expect(res.status).toBe(401)
-    
 })
 
+
 test("DELETE -> 'BASE_URL/:id', should return status code 204", async()=>{
-   
+    
     const res = await request(app)
         .delete(`${BASE_URL}/${userId}`)
         .set("Authorization", `Bearer ${TOKEN}`)
 
     expect(res.status).toBe(204)
-    
-})
 
+})

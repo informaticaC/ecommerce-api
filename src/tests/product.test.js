@@ -2,7 +2,7 @@ const request = require('supertest')
 const app = require('../app')
 require("../models")
 const Category = require('../models/Category')
-////////////////////////////
+
 const BASE_URL_USERS = '/api/v1/users/login'
 let TOKEN 
 const BASE_URL_PRODUCTS = '/api/v1/products'
@@ -11,8 +11,8 @@ let productId
 
 beforeAll(async()=>{
     const user = {
-        email: "agustin@gmail.com",
-        password: "agustin1234"
+        email: "demilanesa@gmail.com",
+        password: "123456"
     }
 
     const res = await request(app)

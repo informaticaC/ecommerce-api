@@ -10,7 +10,7 @@ const getAll = catchError(async(req, res) => {
     });
     return res.json(results);
 });
-
+ 
 const create = catchError(async(req, res) => {
     const userId = req.user.id
     const {quantity,productId} = req.body
