@@ -4,12 +4,13 @@ const Category = require('../models/Category');
 const ProductImg = require('../models/ProductImg');
 
 const getAll = catchError(async(req, res) => {
-    const {category} =req.query
-    const where ={}
-    if(category) where.categoryId =category
+    const {category} = req.query // si req trae el parámetro category, lo desestructuro para usarlo
+    const where = {} // creo una variable objeto tipo const para guardar la categoría, si esta existiera en el req (en lugar de where se puede llamar whereCategoryId)
+    if(category) where.categoryId = category //entonces si existe la category (filtro de prod por categories) lo guardo en el objeto where
+
     const results = await Product.findAll({
-        include:[Category,ProductImg],
-        where
+        include:[Category, ProductImg], // se mostrarán la categoría y la imagen del producto
+        where // where : {where}, si el objeto where contiene la key categoryId, entonces filtra por categoria
     });
     return res.json(results);
 });
@@ -44,13 +45,10 @@ const update = catchError(async(req, res) => {
 
 
 const setImages = catchError(async(req,res)=>{
-    const {id} = req.params
-
+    const {id} = req.params //products/:id/images
     const product = await Product.findByPk(id)
-
-    await product.setProductImgs([req.body])
+    await product.setProductImgs(req.body)
     const images = await product.getProductImgs()
-
     return res.json(images)
 })
 
