@@ -47,6 +47,7 @@ test("POST -> 'URL_BASE_CART',should return status code 201 and res.body.quantit
         .set("Authorization", `Bearer ${TOKEN}`)
     
     cartId = res.body.id
+    console.log(res.body)
 
     expect(res.status).toBe(201)
     expect(res.body.quantity).toBe(cartBody.quantity)
